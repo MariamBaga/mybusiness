@@ -10,23 +10,46 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = Setting::all();
-        return view('admin.settings.index', compact('settings'));
+
+
+        $groups = Setting::select('group')->distinct()->pluck('group');
+        $settings = Setting::all()->groupBy('group');
+
+        return view('admin.settings.index', compact('groups', 'settings'));
     }
 
-    public function edit(Setting $setting)
+    public function update(Request $request)
     {
-        return view('admin.settings.edit', compact('setting'));
+       
+
+        $data = $request->except('_token');
+
+        foreach ($data as $key => $value) {
+            if ($request->hasFile($key)) {
+                $folder = public_path('StockPiece/settings');
+                if (!file_exists($folder)) {
+                    mkdir($folder, 0777, true);
+                }
+
+                $file = $request->file($key);
+                $filename = time() . '_' . uniqid() . '.' . $file->extension();
+                $file->move($folder, $filename);
+                $value = $filename;
+            }
+
+            Setting::setValue($key, $value);
+        }
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Paramètres mis à jour avec succès');
     }
 
-    public function update(Request $request, Setting $setting)
+    public function byGroup($group)
     {
-        $request->validate([
-            'key'   => 'required|string',
-            'value' => 'nullable|string',
-        ]);
 
-        $setting->update($request->all());
-        return back()->with('success','Paramètre mis à jour.');
+
+        $settings = Setting::where('group', $group)->get();
+
+        return view('admin.settings.group', compact('group', 'settings'));
     }
 }

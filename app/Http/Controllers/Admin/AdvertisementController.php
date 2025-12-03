@@ -10,34 +10,45 @@ class AdvertisementController extends Controller
 {
     public function index()
     {
+
         $ads = Advertisement::latest()->paginate(10);
         return view('admin.ads.index', compact('ads'));
     }
 
     public function create()
     {
+
         return view('admin.ads.create');
     }
 
     public function store(Request $request)
     {
+
+
         $request->validate([
-            'title'       => 'required|string',
-            'image'       => 'required|image|mimes:jpg,jpeg,png,webp',
-            'start_date'  => 'required|date',
-            'end_date'    => 'required|date|after_or_equal:start_date',
-            'placement'   => 'required|string',
+            'title' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'url' => 'nullable|url',
+            'placement' => 'required|in:header,sidebar,footer,popup',
+            'type' => 'required|in:banner,video,text',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'priority' => 'integer|min:0|max:10',
+            'status' => 'boolean'
         ]);
 
         $data = $request->except('image');
+        $data['status'] = $request->has('status');
+        $data['views'] = 0;
+        $data['clicks'] = 0;
 
-        // 📁 Créer le dossier si inexistant
+        // Création automatique du dossier
         $folder = public_path('StockPiece/ads');
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
         }
 
-        // 📤 Upload de l’image
+        // Upload image
         if ($request->hasFile('image')) {
             $filename = time() . '_' . uniqid() . '.' . $request->image->extension();
             $request->image->move($folder, $filename);
@@ -46,62 +57,72 @@ class AdvertisementController extends Controller
 
         Advertisement::create($data);
 
-        return redirect()->route('ads.index')->with('success', 'Publicité créée.');
+        return redirect()->route('ads.index')
+            ->with('success', 'Publicité créée avec succès');
     }
 
-    public function edit(Advertisement $ad)
+    public function edit(Advertisement $advertisement)
     {
-        return view('admin.ads.edit', compact('ad'));
+
+        return view('admin.ads.edit', compact('advertisement'));
     }
 
-    public function update(Request $request, Advertisement $ad)
+    public function update(Request $request, Advertisement $advertisement)
     {
+
+
         $request->validate([
-            'title'       => 'required|string',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp',
-            'start_date'  => 'required|date',
-            'end_date'    => 'required|date|after_or_equal:start_date',
-            'placement'   => 'required|string',
+            'title' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'url' => 'nullable|url',
+            'placement' => 'required|in:header,sidebar,footer,popup',
+            'type' => 'required|in:banner,video,text',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'priority' => 'integer|min:0|max:10',
+            'status' => 'boolean'
         ]);
 
         $data = $request->except('image');
+        $data['status'] = $request->has('status');
 
-        // 📁 dossier
+        // Création du dossier si non existant
         $folder = public_path('StockPiece/ads');
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
         }
 
-        // 📤 Nouvelle image ?
+        // Remplacer l'image si nouvelle
         if ($request->hasFile('image')) {
-
-            // Supprimer l’ancienne image
-            if ($ad->image && file_exists($folder . '/' . $ad->image)) {
-                unlink($folder . '/' . $ad->image);
+            // Supprimer l'ancienne image si elle existe
+            if ($advertisement->image && file_exists($folder . '/' . $advertisement->image)) {
+                unlink($folder . '/' . $advertisement->image);
             }
 
-            // Upload de la nouvelle
             $filename = time() . '_' . uniqid() . '.' . $request->image->extension();
             $request->image->move($folder, $filename);
             $data['image'] = $filename;
         }
 
-        $ad->update($data);
+        $advertisement->update($data);
 
-        return back()->with('success', 'Publicité mise à jour.');
+        return redirect()->route('ads.index')
+            ->with('success', 'Publicité mise à jour avec succès');
     }
 
-    public function destroy(Advertisement $ad)
+    public function destroy(Advertisement $advertisement)
     {
+       
+
         $folder = public_path('StockPiece/ads');
 
-        // 🗑️ supprimer l’image
-        if ($ad->image && file_exists($folder . '/' . $ad->image)) {
-            unlink($folder . '/' . $ad->image);
+        if ($advertisement->image && file_exists($folder . '/' . $advertisement->image)) {
+            unlink($folder . '/' . $advertisement->image);
         }
 
-        $ad->delete();
+        $advertisement->delete();
 
-        return back()->with('success', 'Publicité supprimée.');
+        return redirect()->route('ads.index')
+            ->with('success', 'Publicité supprimée avec succès');
     }
 }

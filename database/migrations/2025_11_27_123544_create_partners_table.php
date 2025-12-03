@@ -6,27 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('partners', function (Blueprint $table) {
-    $table->id();
-    $table->string('name');
-    $table->string('email')->nullable();
-    $table->string('logo')->nullable();
-    $table->text('description')->nullable();
-    $table->boolean('status')->default(true);
-    $table->timestamps();
-});
-
+            $table->id();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('website')->nullable();
+            $table->string('logo')->nullable();
+            $table->text('description')->nullable();
+            $table->text('address')->nullable();
+            $table->enum('type', ['corporate', 'individual', 'ngo', 'government'])->default('corporate');
+            $table->boolean('status')->default(true);
+            $table->boolean('featured')->default(false);
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('partners');
     }

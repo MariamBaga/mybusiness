@@ -6,24 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-         Schema::create('sponsors', function (Blueprint $table) {
+        Schema::create('sponsors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('logo')->nullable();
+            $table->string('logo');
             $table->string('url')->nullable();
+            $table->text('description')->nullable();
+            $table->enum('level', ['platinum', 'gold', 'silver', 'bronze'])->default('bronze');
+            $table->boolean('status')->default(true);
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('sponsors');
     }

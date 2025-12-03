@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Advertisement extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'image',
@@ -15,17 +18,34 @@ class Advertisement extends Model
         'end_date',
         'views',
         'clicks',
-        'type'
+        'type',
+        'status',
+        'priority'
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date'
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'status' => 'boolean',
+        'views' => 'integer',
+        'clicks' => 'integer'
     ];
 
-    // Vérifier si la publicité est active
     public function isActive()
     {
-        return now()->between($this->start_date, $this->end_date);
+        $now = now();
+        return $this->status &&
+               $now->gte($this->start_date) &&
+               $now->lte($this->end_date);
+    }
+
+    public function incrementViews()
+    {
+        $this->increment('views');
+    }
+
+    public function incrementClicks()
+    {
+        $this->increment('clicks');
     }
 }

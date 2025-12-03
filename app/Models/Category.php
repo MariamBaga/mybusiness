@@ -3,14 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
-    protected $fillable = ['name'];
+    use HasFactory;
 
-    // Un post appartient à une catégorie
+    protected $fillable = ['name', 'slug', 'color', 'description', 'status'];
+
+    protected static function booted()
+    {
+        static::creating(function ($category) {
+            $category->slug = Str::slug($category->name);
+        });
+
+        static::updating(function ($category) {
+            $category->slug = Str::slug($category->name);
+        });
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

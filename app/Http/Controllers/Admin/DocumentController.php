@@ -10,91 +10,133 @@ class DocumentController extends Controller
 {
     public function index()
     {
+
         $documents = Document::latest()->paginate(10);
         return view('admin.documents.index', compact('documents'));
     }
 
     public function create()
     {
+
         return view('admin.documents.create');
     }
 
     public function store(Request $request)
     {
+
+
         $request->validate([
-            'title' => 'required',
-            'file'  => 'required|file|mimes:pdf,doc,docx',
+            'title' => 'required|string|max:255',
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,mp4,webp|max:10240',
+            'description' => 'nullable|string',
+            'type' => 'required|in:pdf,doc,excel,image,video,other',
+            'status' => 'boolean'
         ]);
 
         $data = $request->except('file');
+        $data['status'] = $request->has('status');
 
-        // 📁 créer le dossier si inexistant
+        // Création automatique du dossier
         $folder = public_path('StockPiece/documents');
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
         }
 
-        // 📤 upload du fichier
+        // Upload du fichier
         if ($request->hasFile('file')) {
-            $filename = time() . '_' . uniqid() . '.' . $request->file->extension();
-            $request->file->move($folder, $filename);
+            $file = $request->file('file');
+            $filename = time() . '_' . uniqid() . '.' . $file->extension();
+            $file->move($folder, $filename);
+
             $data['file'] = $filename;
+            $data['file_size'] = $file->getSize();
+            $data['file_type'] = $file->getMimeType();
+            $data['slug'] = \Illuminate\Support\Str::slug($request->title);
+            $data['download_count'] = 0;
         }
 
         Document::create($data);
 
-        return redirect()->route('documents.index')->with('success', 'Document ajouté.');
+        return redirect()->route('documents.index')
+            ->with('success', 'Document uploadé avec succès');
     }
 
     public function edit(Document $document)
     {
+
         return view('admin.documents.edit', compact('document'));
     }
 
     public function update(Request $request, Document $document)
     {
+
+
         $request->validate([
-            'title' => 'required',
-            'file'  => 'nullable|file|mimes:pdf,doc,docx',
+            'title' => 'required|string|max:255',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,mp4,webp|max:10240',
+            'description' => 'nullable|string',
+            'type' => 'required|in:pdf,doc,excel,image,video,other',
+            'status' => 'boolean'
         ]);
 
         $data = $request->except('file');
+        $data['status'] = $request->has('status');
+        $data['slug'] = \Illuminate\Support\Str::slug($request->title);
 
+        // Création du dossier si non existant
         $folder = public_path('StockPiece/documents');
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
         }
 
-        // 📝 si un nouveau fichier est ajouté
+        // Remplacer le fichier si nouveau
         if ($request->hasFile('file')) {
-
-            // supprimer l’ancien fichier
+            // Supprimer l'ancien fichier s'il existe
             if ($document->file && file_exists($folder . '/' . $document->file)) {
                 unlink($folder . '/' . $document->file);
             }
 
-            // uploader le nouveau
-            $filename = time() . '_' . uniqid() . '.' . $request->file->extension();
-            $request->file->move($folder, $filename);
+            $file = $request->file('file');
+            $filename = time() . '_' . uniqid() . '.' . $file->extension();
+            $file->move($folder, $filename);
+
             $data['file'] = $filename;
+            $data['file_size'] = $file->getSize();
+            $data['file_type'] = $file->getMimeType();
         }
 
         $document->update($data);
 
-        return back()->with('success', 'Document mis à jour.');
+        return redirect()->route('documents.index')
+            ->with('success', 'Document mis à jour avec succès');
     }
 
     public function destroy(Document $document)
     {
+
+
         $folder = public_path('StockPiece/documents');
 
-        // 🗑️ supprimer le fichier dans le dossier
         if ($document->file && file_exists($folder . '/' . $document->file)) {
             unlink($folder . '/' . $document->file);
         }
 
         $document->delete();
 
-        return back()->with('success', 'Document supprimé.');
+        return redirect()->route('documents.index')
+            ->with('success', 'Document supprimé avec succès');
+    }
+
+    public function download(Document $document)
+    {
+
+
+        // Incrémenter le compteur de téléchargements
+        $document->increment('download_count');
+
+        $folder = public_path('StockPiece/documents');
+        $path = $folder . '/' . $document->file;
+
+        return response()->download($path, $document->title . '.' . pathinfo($document->file, PATHINFO_EXTENSION));
     }
 }

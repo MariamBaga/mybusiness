@@ -12,7 +12,13 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // ────────── Permissions ──────────
+        // Vérifier si les tables Spatie existent
+        if (!\Schema::hasTable('roles') || !\Schema::hasTable('permissions')) {
+            $this->command->warn("⚠ Les tables Spatie Permission n'existent pas encore. Faites : php artisan migrate");
+            return;
+        }
+
+        // ─────────────── Permissions ───────────────
         $permissions = [
             // Users
             'view users', 'create users', 'edit users', 'delete users',
@@ -26,8 +32,10 @@ class RolePermissionSeeder extends Seeder
             // Products
             'view products', 'create products', 'edit products', 'delete products',
 
-            // Posts / Blog
+            // Posts (Blog)
             'view posts', 'create posts', 'edit posts', 'delete posts',
+
+            // Categories & Tags
             'view categories', 'create categories', 'edit categories', 'delete categories',
             'view tags', 'create tags', 'edit tags', 'delete tags',
 
@@ -35,8 +43,7 @@ class RolePermissionSeeder extends Seeder
             'view faqs', 'create faqs', 'edit faqs', 'delete faqs',
 
             // Tickets
-'view tickets', 'create tickets', 'edit tickets', 'delete tickets',
-
+            'view tickets', 'create tickets', 'edit tickets', 'delete tickets',
 
             // Advertisements
             'view ads', 'create ads', 'edit ads', 'delete ads',
@@ -49,42 +56,56 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::firstOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web'
+            ]);
         }
 
-        // ────────── Roles ──────────
+        // ─────────────── Roles ───────────────
         $roles = [
-            'admin' => $permissions, // Admin a toutes les permissions
+            'admin' => $permissions, // l’admin a accès total
+
             'user' => [
                 'view posts',
                 'view products',
                 'view faqs',
                 'create tickets',
             ],
+
             'partner' => [
-                'view posts', 'view products', 'create products',
+                'view products',
+                'create products',
+                'edit products',
+                'delete products',
             ],
+
             'sponsor' => [
-                'view posts', 'create ads',
+                'view ads',
+                'create ads',
             ],
         ];
 
         foreach ($roles as $roleName => $rolePermissions) {
-            $role = Role::firstOrCreate(['name' => $roleName]);
+            $role = Role::firstOrCreate([
+                'name' => $roleName,
+                'guard_name' => 'web'
+            ]);
+
             $role->syncPermissions($rolePermissions);
         }
 
-        // ────────── Utilisateur admin par défaut ──────────
+        // ─────────────── Admin par défaut ───────────────
         $admin = User::firstOrCreate(
             ['email' => 'admin@mybusiness.com'],
             [
                 'name' => 'Administrateur',
-                'password' => Hash::make('password123'), // change ensuite en production
+                'password' => Hash::make('password123'),
             ]
         );
 
         $admin->assignRole('admin');
 
-        $this->command->info('Seeder RolePermission exécuté avec succès !');
+        $this->command->info('🎉 Seeder RolePermission exécuté avec succès !');
     }
 }

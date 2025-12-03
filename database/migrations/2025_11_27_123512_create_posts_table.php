@@ -6,27 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->string('slug')->unique();
-            $table->string('image')->nullable();
+            $table->text('excerpt')->nullable();
             $table->longText('content');
-            $table->boolean('status')->default(true);
+            $table->string('image')->nullable();
+            $table->boolean('status')->default(false);
+            $table->integer('views')->default(0);
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->text('meta_keywords')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('posts');
     }
