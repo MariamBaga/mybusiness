@@ -44,4 +44,15 @@ class Document extends Model
             return $bytes . ' bytes';
         }
     }
+
+    public function getSizeFormattedAttribute()
+{
+    $bytes = $this->file_size;
+    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+    $bytes = max($bytes, 0);
+    $power = $bytes > 0 ? floor(log($bytes, 1024)) : 0;
+
+    return round($bytes / pow(1024, $power), 2) . ' ' . $units[$power];
+}
 }

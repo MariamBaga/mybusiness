@@ -43,17 +43,25 @@ class DocumentController extends Controller
         }
 
         // Upload du fichier
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filename = time() . '_' . uniqid() . '.' . $file->extension();
-            $file->move($folder, $filename);
+       if ($request->hasFile('file')) {
 
-            $data['file'] = $filename;
-            $data['file_size'] = $file->getSize();
-            $data['file_type'] = $file->getMimeType();
-            $data['slug'] = \Illuminate\Support\Str::slug($request->title);
-            $data['download_count'] = 0;
-        }
+    $file = $request->file('file');
+
+    // Infos AVANT de déplacer
+    $data['file_size'] = $file->getSize();
+    $data['file_type'] = $file->getMimeType();
+
+    // Nom et emplacement
+    $filename = time() . '_' . uniqid() . '.' . $file->extension();
+
+    $file->move(public_path('StockPiece/documents'), $filename);
+
+    $data['file'] = $filename;
+
+    // Slug
+    $data['slug'] = \Str::slug($request->title);
+}
+
 
         Document::create($data);
 

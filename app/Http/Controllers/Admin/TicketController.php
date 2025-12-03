@@ -4,33 +4,38 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+
 use App\Models\TicketReply;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
-    public function index()
-    {
-        $this->authorize('view tickets');
 
-        $tickets = Ticket::with(['user', 'assignedTo'])
-            ->latest()
-            ->paginate(10);
+public function index()
+{
+    $tickets = Ticket::with(['user', 'assignedTo'])
+        ->latest()
+        ->paginate(10);
 
-        return view('admin.tickets.index', compact('tickets'));
-    }
+    $openCount = Ticket::where('status', 'open')->count();
+    $closedCount = Ticket::where('status', 'closed')->count();
+    $resolvedCount = Ticket::where('status', 'resolved')->count();
+
+    return view('admin.tickets.index', compact('tickets', 'openCount', 'closedCount', 'resolvedCount'));
+}
+
 
     public function create()
     {
-        $this->authorize('create tickets');
+
         $users = User::all();
         return view('admin.tickets.create', compact('users'));
     }
 
     public function store(Request $request)
     {
-        $this->authorize('create tickets');
+
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -47,33 +52,33 @@ class TicketController extends Controller
             'status' => 'open'
         ]);
 
-        return redirect()->route('admin.tickets.index')
+        return redirect()->route('tickets.index')
             ->with('success', 'Ticket créé avec succès');
     }
 
     public function show(Ticket $ticket)
     {
-        $this->authorize('view tickets');
+
 
         $ticket->load(['replies.user', 'user', 'assignedTo']);
-        $agents = User::role(['admin', 'editor'])->get();
+        $agents = User::role(['admin'])->get();
 
         return view('admin.tickets.show', compact('ticket', 'agents'));
     }
 
     public function edit(Ticket $ticket)
     {
-        $this->authorize('edit tickets');
+
 
         $users = User::all();
-        $agents = User::role(['admin', 'editor'])->get();
+        $agents = User::role(['admin'])->get();
 
         return view('admin.tickets.edit', compact('ticket', 'users', 'agents'));
     }
 
     public function update(Request $request, Ticket $ticket)
     {
-        $this->authorize('edit tickets');
+
 
         $request->validate([
             'assigned_to' => 'nullable|exists:users,id',
@@ -90,13 +95,13 @@ class TicketController extends Controller
 
         $ticket->update($data);
 
-        return redirect()->route('admin.tickets.show', $ticket)
+        return redirect()->route('tickets.show', $ticket)
             ->with('success', 'Ticket mis à jour avec succès');
     }
 
     public function destroy(Ticket $ticket)
     {
-        $this->authorize('delete tickets');
+
 
         // Supprimer les pièces jointes des réponses
         $folder = public_path('StockPiece/ticket-attachments');
@@ -113,13 +118,13 @@ class TicketController extends Controller
 
         $ticket->delete();
 
-        return redirect()->route('admin.tickets.index')
+        return redirect()->route('tickets.index')
             ->with('success', 'Ticket supprimé avec succès');
     }
 
     public function reply(Request $request, Ticket $ticket)
     {
-        $this->authorize('edit tickets');
+
 
         $request->validate([
             'message' => 'required|string',
@@ -154,7 +159,7 @@ class TicketController extends Controller
             $ticket->update(['status' => 'in_progress']);
         }
 
-        return redirect()->route('admin.tickets.show', $ticket)
+        return redirect()->route('tickets.show', $ticket)
             ->with('success', 'Réponse envoyée avec succès');
     }
 }

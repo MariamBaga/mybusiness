@@ -10,21 +10,43 @@ class FaqController extends Controller
 {
     public function index()
     {
-        $this->authorize('view faqs');
-        $faqs = Faq::orderBy('order')->paginate(10);
-        return view('admin.faqs.index', compact('faqs'));
+        // Récupérer les catégories uniques
+        $categories = Faq::select('category')
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->pluck('category');
+
+        // Filtrer par catégorie si spécifiée
+        $query = Faq::orderBy('order');
+
+        if (request()->has('category') && request('category') != '') {
+            $query->where('category', request('category'));
+        }
+
+        if (request()->has('search') && request('search') != '') {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('question', 'LIKE', "%{$search}%")
+                  ->orWhere('answer', 'LIKE', "%{$search}%")
+                  ->orWhere('category', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $faqs = $query->paginate(10);
+
+        return view('admin.faqs.index', compact('faqs', 'categories'));
     }
 
     public function create()
     {
-        $this->authorize('create faqs');
-        return view('admin.faqs.create');
+        // Récupérer l'ordre maximum pour la nouvelle FAQ
+        $nextOrder = Faq::max('order') + 1;
+        return view('admin.faqs.create', compact('nextOrder'));
     }
 
     public function store(Request $request)
     {
-        $this->authorize('create faqs');
-
         $request->validate([
             'question' => 'required|string|max:500',
             'answer' => 'required|string',
@@ -46,14 +68,11 @@ class FaqController extends Controller
 
     public function edit(Faq $faq)
     {
-        $this->authorize('edit faqs');
         return view('admin.faqs.edit', compact('faq'));
     }
 
     public function update(Request $request, Faq $faq)
     {
-        $this->authorize('edit faqs');
-
         $request->validate([
             'question' => 'required|string|max:500',
             'answer' => 'required|string',
@@ -74,7 +93,6 @@ class FaqController extends Controller
 
     public function destroy(Faq $faq)
     {
-        $this->authorize('delete faqs');
         $faq->delete();
 
         return redirect()->route('faqs.index')
@@ -83,10 +101,8 @@ class FaqController extends Controller
 
     public function updateOrder(Request $request)
     {
-        $this->authorize('edit faqs');
-
         foreach ($request->order as $order => $id) {
-            Faq::where('id', $id)->update(['order' => $order]);
+            Faq::where('id', $id)->update(['order' => $order + 1]);
         }
 
         return response()->json(['success' => true]);

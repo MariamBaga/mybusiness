@@ -125,8 +125,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::resource('ads', AdvertisementController::class);
     Route::resource('documents', DocumentController::class);
+    Route::get('documents/{document}/download', [DocumentController::class, 'download'])
+    ->name('documents.download');
     Route::resource('faqs', FaqController::class);
+      // Route pour mettre à jour l'ordre
+        Route::post('/update-order', [FaqController::class, 'updateOrder'])->name('faqs.updateOrder');
     Route::resource('sponsors', SponsorController::class);
+     // Route pour mettre à jour l'ordre
+        Route::post('/update-order', [SponsorController::class, 'updateOrder'])->name('sponsors.updateOrder');
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
 
@@ -146,7 +152,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     });
 
     // Tickets (admin only)
-    Route::resource('tickets', TicketController::class)->except(['create', 'store']);
+    Route::resource('tickets', TicketController::class);
+    // If you're using a resource controller, add it as a separate route
+Route::post('/tickets/{ticket}/reply', [TicketController::class, 'reply'])
+    ->name('tickets.reply');
 
     // Settings
     Route::resource('settings', SettingController::class)->only(['index', 'edit', 'update']);
