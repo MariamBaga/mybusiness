@@ -328,12 +328,12 @@ return [
             ],
             [
                 'text' => 'Catégories',
-              //  'url' => 'admin/categories',
+                'url' => 'admin/categories',
                 'icon' => 'fas fa-folder',
             ],
             [
                 'text' => 'Tags',
-             //   'url' => 'admin/tags',
+                'url' => 'admin/tags',
                 'icon' => 'fas fa-tags',
             ],
         ],
