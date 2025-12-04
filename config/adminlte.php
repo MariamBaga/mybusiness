@@ -307,10 +307,14 @@ return [
     ['type' => 'sidebar-menu-search', 'text' => 'Search'],
 
     // Dashboard
-    ['text' => 'Dashboard', 'url' => 'admin', 'icon' => 'fas fa-tachometer-alt'],
+    ['text' => 'Dashboard',
+  //  'url' => 'admin',
+    'icon' => 'fas fa-tachometer-alt'],
 
     // Utilisateurs
-    ['text' => 'Utilisateurs', 'url' => 'admin/users', 'icon' => 'fas fa-users'],
+    ['text' => 'Utilisateurs',
+     'url' => 'admin/users',
+     'icon' => 'fas fa-users'],
 
     // Blog menu
     [
@@ -324,26 +328,42 @@ return [
             ],
             [
                 'text' => 'Catégories',
-                'url' => 'admin/categories',
+              //  'url' => 'admin/categories',
                 'icon' => 'fas fa-folder',
             ],
             [
                 'text' => 'Tags',
-                'url' => 'admin/tags',
+             //   'url' => 'admin/tags',
                 'icon' => 'fas fa-tags',
             ],
         ],
     ],
 
     // Autres modules
-    ['text' => 'Publicités', 'url' => 'admin/ads', 'icon' => 'fas fa-bullhorn'],
-    ['text' => 'Produits', 'url' => 'admin/products', 'icon' => 'fas fa-box'],
-    ['text' => 'Partenaires', 'url' => 'admin/partners', 'icon' => 'fas fa-handshake'],
-    ['text' => 'Documents', 'url' => 'admin/documents', 'icon' => 'fas fa-file-alt'],
-    ['text' => 'FAQ', 'url' => 'admin/faqs', 'icon' => 'fas fa-question-circle'],
-    ['text' => 'Sponsors', 'url' => 'admin/sponsors', 'icon' => 'fas fa-star'],
-    ['text' => 'Tickets', 'url' => 'admin/tickets', 'icon' => 'fas fa-ticket-alt'],
-    ['text' => 'Paramètres', 'url' => 'admin/settings', 'icon' => 'fas fa-cogs'],
+    ['text' => 'Publicités',
+   // 'url' => 'admin/ads',
+    'icon' => 'fas fa-bullhorn'],
+    ['text' => 'Produits',
+    //'url' => 'admin/products',
+    'icon' => 'fas fa-box'],
+    ['text' => 'Partenaires',
+   // 'url' => 'admin/partners',
+    'icon' => 'fas fa-handshake'],
+    ['text' => 'Documents',
+  //  'url' => 'admin/documents',
+    'icon' => 'fas fa-file-alt'],
+    ['text' => 'FAQ',
+   // 'url' => 'admin/faqs',
+    'icon' => 'fas fa-question-circle'],
+    ['text' => 'Sponsors',
+    //'url' => 'admin/sponsors',
+    'icon' => 'fas fa-star'],
+    ['text' => 'Tickets',
+    // 'url' => 'admin/tickets',
+     'icon' => 'fas fa-ticket-alt'],
+    ['text' => 'Paramètres',
+    //'url' => 'admin/settings',
+    'icon' => 'fas fa-cogs'],
 
     // Exemple multilevel
     [
