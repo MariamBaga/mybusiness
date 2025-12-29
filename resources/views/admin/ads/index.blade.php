@@ -229,19 +229,18 @@
                                                 <i class="fas fa-eye"></i>
                                             </button>
 
-                                            <form action="{{ route('ads.destroy', $ad->id) }}"
-                                                  method="POST"
-                                                  class="d-inline"
-                                                  onsubmit="return confirmDeleteAd()">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="btn btn-outline-danger btn-sm"
-                                                        data-toggle="tooltip"
-                                                        title="Supprimer">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                           <form action="{{ route('ads.destroy', $ad->id) }}"
+      method="POST"
+      class="d-inline delete-form">
+    @csrf
+    @method('DELETE')
+    <button type="button"
+            class="btn btn-outline-danger btn-sm delete-btn"
+            data-toggle="tooltip"
+            title="Supprimer">
+        <i class="fas fa-trash"></i>
+    </button>
+</form>
                                         </div>
 
                                         <!-- Modal pour voir les détails -->
@@ -509,21 +508,35 @@
         $('#adsTable tbody tr').show();
     }
 
-    function confirmDeleteAd() {
-        return Swal.fire({
-            title: 'Supprimer cette publicité ?',
-            text: "Cette action est irréversible !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Oui, supprimer !',
-            cancelButtonText: 'Annuler',
-            buttonsStyling: true
-        }).then((result) => {
-            return result.isConfirmed;
-        });
-    }
+    // REMPLACEZ la fonction confirmDeleteAd() par :
+function confirmDeleteAd(event) {
+    // Empêcher la soumission par défaut
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Trouver le formulaire parent
+    const form = event.target.closest('form');
+
+    Swal.fire({
+        title: 'Supprimer cette publicité ?',
+        text: "Cette action est irréversible !",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Oui, supprimer !',
+        cancelButtonText: 'Annuler',
+        buttonsStyling: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Soumettre le formulaire si confirmé
+            form.submit();
+        }
+    });
+
+    // Toujours retourner false pour empêcher la soumission immédiate
+    return false;
+}
 
     // Notifications SweetAlert2
     @if(session('success'))
@@ -549,5 +562,29 @@
             position: 'top-end'
         });
     @endif
+
+
+    // Gestion des clics sur les boutons de suppression avec délégation d'événement
+$(document).on('click', '.delete-btn', function(e) {
+    e.preventDefault();
+    const form = $(this).closest('form');
+
+    Swal.fire({
+        title: 'Supprimer cette publicité ?',
+        text: "Cette action est irréversible !",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Oui, supprimer !',
+        cancelButtonText: 'Annuler',
+        buttonsStyling: true,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+});
 </script>
 @stop

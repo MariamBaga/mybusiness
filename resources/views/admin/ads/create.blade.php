@@ -244,20 +244,24 @@
                             </div>
                         </div>
 
-                        <div class="form-check mb-3">
-                            <input type="checkbox"
-                                   name="status"
-                                   id="status"
-                                   class="form-check-input"
-                                   {{ old('status', true) ? 'checked' : '' }}>
-                            <label class="form-check-label font-weight-bold" for="status">
-                                <i class="fas fa-toggle-on text-success mr-1"></i>
-                                Publicité active
-                            </label>
-                            <small class="form-text text-muted d-block">
-                                Une publicité inactive ne sera pas affichée sur le site
-                            </small>
-                        </div>
+                       <div class="form-check mb-3">
+    <!-- Champ caché avec valeur 0 -->
+    <input type="hidden" name="status" value="0">
+
+    <input type="checkbox"
+           name="status"
+           id="status"
+           class="form-check-input"
+           value="1"
+           {{ old('status', $ad->status ?? true) ? 'checked' : '' }}>
+    <label class="form-check-label font-weight-bold" for="status">
+        <i class="fas fa-toggle-on text-warning mr-1"></i>
+        Publicité active
+    </label>
+    <small class="form-text text-muted d-block">
+        Une publicité inactive ne sera pas affichée sur le site
+    </small>
+</div>
                     </div>
 
                     <div class="card-footer bg-white">

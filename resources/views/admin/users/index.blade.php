@@ -126,19 +126,19 @@
                                     </button>
 
                                     @can('delete users')
-                                    <form action="{{ route('users.destroy', $user->id) }}"
-                                          method="POST"
-                                          class="d-inline"
-                                          onsubmit="return confirmDeleteUser({{ $user->id }})">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-outline-danger btn-sm"
-                                                data-toggle="tooltip"
-                                                title="Supprimer">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
+                                   <form action="{{ route('users.destroy', $user->id) }}"
+      method="POST"
+      class="d-inline">
+    @csrf
+    @method('DELETE')
+    <button type="button"
+            onclick="confirmDeleteUser(event, {{ $user->id }})"
+            class="btn btn-outline-danger btn-sm"
+            data-toggle="tooltip"
+            title="Supprimer">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+</form>
                                     @endcan
                                 </div>
 
@@ -352,25 +352,35 @@
         });
     });
 
-    function confirmDeleteUser(userId) {
-        return Swal.fire({
-            title: 'Êtes-vous sûr ?',
-            text: "Cette action est irréversible ! L'utilisateur sera définitivement supprimé.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Oui, supprimer !',
-            cancelButtonText: 'Annuler',
-            buttonsStyling: true,
-            customClass: {
-                confirmButton: 'btn btn-danger mx-2',
-                cancelButton: 'btn btn-secondary mx-2'
-            }
-        }).then((result) => {
-            return result.isConfirmed;
-        });
-    }
+   function confirmDeleteUser(event, userId) {
+    // Empêcher la soumission par défaut
+    event.preventDefault();
+    event.stopPropagation();
+
+    Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: "Cette action est irréversible ! L'utilisateur sera définitivement supprimé.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Oui, supprimer !',
+        cancelButtonText: 'Annuler',
+        buttonsStyling: true,
+        customClass: {
+            confirmButton: 'btn btn-danger mx-2',
+            cancelButton: 'btn btn-secondary mx-2'
+        },
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Trouver et soumettre le formulaire
+            event.target.closest('form').submit();
+        }
+    });
+
+    return false;
+}
 
     // Recherche dans le tableau
     $('#searchInput').on('keyup', function() {
@@ -437,4 +447,34 @@
         });
     </script>
 @endif
+
+<script>
+    // Dans les deux fichiers, remplacez la fonction de confirmation par :
+$(document).ready(function() {
+    // Délégation d'événement pour tous les boutons de suppression
+    $(document).on('click', 'form button[type="submit"]', function(e) {
+        // Vérifier si le bouton est dans un formulaire de suppression
+        const form = $(this).closest('form');
+        if (form.find('input[name="_method"][value="DELETE"]').length) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Confirmer la suppression',
+                text: "Êtes-vous sûr de vouloir supprimer cet élément ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer',
+                cancelButtonText: 'Annuler',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    });
+});
+</script>
 @stop

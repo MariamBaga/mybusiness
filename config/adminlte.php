@@ -341,13 +341,13 @@ return [
 
     // Autres modules
     ['text' => 'Publicités',
-   // 'url' => 'admin/ads',
+    'url' => 'admin/ads',
     'icon' => 'fas fa-bullhorn'],
     ['text' => 'Produits',
-    //'url' => 'admin/products',
+'url' => 'admin/products',
     'icon' => 'fas fa-box'],
     ['text' => 'Partenaires',
-   // 'url' => 'admin/partners',
+    'url' => 'admin/partners',
     'icon' => 'fas fa-handshake'],
     ['text' => 'Documents',
   //  'url' => 'admin/documents',

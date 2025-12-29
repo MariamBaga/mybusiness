@@ -14,7 +14,7 @@ class PageController extends Controller
      */
     public function about()
     {
-        return view('web.pages.about');
+        return view('web.about');
     }
 
     /**
@@ -22,7 +22,7 @@ class PageController extends Controller
      */
     public function features()
     {
-        return view('web.pages.features');
+        return view('web.features');
     }
 
     /**
@@ -30,7 +30,7 @@ class PageController extends Controller
      */
     public function pricing()
     {
-        return view('web.pages.pricing');
+        return view('web.pricing');
     }
 
     /**
@@ -40,7 +40,7 @@ class PageController extends Controller
     {
         $documents = Document::latest()->get();
 
-        return view('web.pages.downloads', compact('documents'));
+        return view('web.downloads', compact('documents'));
     }
 
     /**
@@ -50,7 +50,7 @@ class PageController extends Controller
     {
         $partners = Partner::where('status', true)->get();
 
-        return view('web.pages.partners', compact('partners'));
+        return view('web.partners', compact('partners'));
     }
 
     /**

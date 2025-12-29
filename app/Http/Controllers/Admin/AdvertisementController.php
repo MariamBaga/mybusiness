@@ -10,21 +10,17 @@ class AdvertisementController extends Controller
 {
     public function index()
     {
-
         $ads = Advertisement::latest()->paginate(10);
         return view('admin.ads.index', compact('ads'));
     }
 
     public function create()
     {
-
         return view('admin.ads.create');
     }
 
     public function store(Request $request)
     {
-
-
         $request->validate([
             'title' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -61,16 +57,13 @@ class AdvertisementController extends Controller
             ->with('success', 'Publicité créée avec succès');
     }
 
-    public function edit(Advertisement $advertisement)
+    public function edit(Advertisement $ad)
     {
-
-        return view('admin.ads.edit', compact('advertisement'));
+        return view('admin.ads.edit', compact('ad'));
     }
 
-    public function update(Request $request, Advertisement $advertisement)
+    public function update(Request $request, Advertisement $ad)
     {
-
-
         $request->validate([
             'title' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -94,9 +87,9 @@ class AdvertisementController extends Controller
 
         // Remplacer l'image si nouvelle
         if ($request->hasFile('image')) {
-            // Supprimer l'ancienne image si elle existe
-            if ($advertisement->image && file_exists($folder . '/' . $advertisement->image)) {
-                unlink($folder . '/' . $advertisement->image);
+            // CORRECTION : Utiliser $ad au lieu de $advertisement
+            if ($ad->image && file_exists($folder . '/' . $ad->image)) {
+                unlink($folder . '/' . $ad->image);
             }
 
             $filename = time() . '_' . uniqid() . '.' . $request->image->extension();
@@ -104,23 +97,23 @@ class AdvertisementController extends Controller
             $data['image'] = $filename;
         }
 
-        $advertisement->update($data);
+        $ad->update($data);
 
         return redirect()->route('ads.index')
             ->with('success', 'Publicité mise à jour avec succès');
     }
 
-    public function destroy(Advertisement $advertisement)
+    public function destroy(Advertisement $ad)
     {
-       
-
         $folder = public_path('StockPiece/ads');
 
-        if ($advertisement->image && file_exists($folder . '/' . $advertisement->image)) {
-            unlink($folder . '/' . $advertisement->image);
+        // CORRECTION : Utiliser $ad au lieu de $advertisement
+        if ($ad->image && file_exists($folder . '/' . $ad->image)) {
+            unlink($folder . '/' . $ad->image);
         }
 
-        $advertisement->delete();
+        // CORRECTION : Utiliser $ad au lieu de $advertisement
+        $ad->delete();
 
         return redirect()->route('ads.index')
             ->with('success', 'Publicité supprimée avec succès');
