@@ -127,7 +127,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     */
 
     Route::resource('ads', AdvertisementController::class);
-    
+
     Route::resource('documents', DocumentController::class);
     Route::get('documents/{document}/download', [DocumentController::class, 'download'])
     ->name('documents.download');
@@ -155,6 +155,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         Route::get('/{partner}/export', [PartnerController::class, 'export'])->name('export');
     });
 
+
+    Route::post('/admin/faqs/update-order', [FaqController::class, 'updateOrder'])
+    ->name('faqs.updateOrder');
     // Tickets (admin only)
     Route::resource('tickets', TicketController::class);
     // If you're using a resource controller, add it as a separate route

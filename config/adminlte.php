@@ -308,7 +308,7 @@ return [
 
     // Dashboard
     ['text' => 'Dashboard',
-  //  'url' => 'admin',
+   'url' => 'admin',
     'icon' => 'fas fa-tachometer-alt'],
 
     // Utilisateurs
@@ -350,13 +350,13 @@ return [
     'url' => 'admin/partners',
     'icon' => 'fas fa-handshake'],
     ['text' => 'Documents',
-  //  'url' => 'admin/documents',
+   'url' => 'admin/documents',
     'icon' => 'fas fa-file-alt'],
     ['text' => 'FAQ',
-   // 'url' => 'admin/faqs',
+    'url' => 'admin/faqs',
     'icon' => 'fas fa-question-circle'],
     ['text' => 'Sponsors',
-    //'url' => 'admin/sponsors',
+    'url' => 'admin/sponsors',
     'icon' => 'fas fa-star'],
     ['text' => 'Tickets',
     // 'url' => 'admin/tickets',
