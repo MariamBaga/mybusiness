@@ -34,7 +34,7 @@
                                 à votre activité et évoluez avec nous.
                             </p>
                         </div>
-                        <a href="{{ route('pages.downloads') }}" class="ht-btn style-2 wow fadeInUp" data-wow-delay=".8s">
+                        <a href="#" class="ht-btn style-2 wow fadeInUp" data-wow-delay=".8s">
                             Télécharger le business plan
                         </a>
                     </div>
@@ -123,7 +123,7 @@
             Pour les grandes entreprises, groupes et réseaux de points de vente, nous proposons
             des solutions sur mesure avec intégration API, formation avancée et support dédié.
         </p>
-        <a href="{{ route('support.contact') }}" class="ht-btn style-2 wow fadeInUp" data-wow-delay=".4s">
+        <a href="#" class="ht-btn style-2 wow fadeInUp" data-wow-delay=".4s">
             Demander un devis Enterprise
         </a>
     </div>

@@ -349,7 +349,7 @@
                     Pour les partenaires et entreprises, nous pouvons préparer des documents
                     sur mesure adaptés à vos besoins spécifiques.
                 </p>
-                <a href="{{ route('support.contact') }}" class="ht-btn style-3">
+                <a href="#" class="ht-btn style-3">
                     <i class="fa-solid fa-file-circle-question me-2"></i>
                     Demander des documents personnalisés
                 </a>

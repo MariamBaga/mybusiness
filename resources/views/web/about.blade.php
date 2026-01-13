@@ -52,7 +52,7 @@
                             </p>
                         </div>
 
-                        <a href="{{ route('support.contact') }}" class="ht-btn style-3 wow fadeInUp" data-wow-delay=".9s">
+                        <a href="#" class="ht-btn style-3 wow fadeInUp" data-wow-delay=".9s">
                             Contactez-nous
                         </a>
 

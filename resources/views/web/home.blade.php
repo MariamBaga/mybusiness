@@ -319,7 +319,7 @@
                             <a href="{{ route('advertise.index') }}" class="ht-btn style-2">
                                 <i class="fas fa-bullhorn me-2"></i>Publicité
                             </a>
-                            <a href="{{ route('pages.partners') }}" class="ht-btn btn-outline-primary">
+                            <a href="#" class="ht-btn btn-outline-primary">
                                 Devenir partenaire
                             </a>
                         </div>
@@ -404,11 +404,11 @@
                     </p>
 
                     <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
-                        <a href="{{ route('pages.pricing') }}#free-trial" class="ht-btn btn-lg style-2">
+                        <a href="##free-trial" class="ht-btn btn-lg style-2">
                             <i class="fas fa-rocket me-2"></i>Commencer l'essai gratuit
                         </a>
 
-                        <a href="{{ route('support.contact') }}" class="ht-btn btn-lg btn-outline-light">
+                        <a href="#" class="ht-btn btn-lg btn-outline-light">
                             <i class="fas fa-calendar me-2"></i>Réserver une démo
                         </a>
                     </div>
@@ -446,7 +446,7 @@
                         <span class="subtitle">Actualités</span>
                         <h2 class="title mb-0">Derniers articles du blog</h2>
                     </div>
-                    <a href="{{ route('blog.index') }}" class="btn btn-link">
+                    <a href="#" class="btn btn-link">
                         Voir tous <i class="fas fa-arrow-right ms-1"></i>
                     </a>
                 </div>
