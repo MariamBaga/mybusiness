@@ -6,8 +6,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="hurraytheme">
-    <meta name="description" content="Prozen - Business Consulting HTML Template">
+  <meta name="description" content="@yield('description', 'MyBusiness - Solution digitale pour commerçants et PME en Afrique. Suivi des ventes, gestion des stocks, rapports intelligents.')">
+<meta name="keywords" content="@yield('keywords', 'mybusiness, gestion commerce, afrique, vente, stock, PME, digitalisation')">
+<meta name="author" content="ConnectiiX">
     <!-- ======== Page title ============ -->
     <title>@yield('title', 'Prozen - Business Consulting')</title>
 
@@ -20,7 +21,8 @@
     <!--<< Bootstrap min.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <!--<< All Min Css >>-->
-    <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <!--<< Animate.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
     <!--<< Magnific Popup.css >>-->
@@ -33,6 +35,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/nice-select.css') }}">
     <!--<< Main.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/logo/favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ asset('assets/img/logo/apple-touch-icon.png') }}">
 
     <!-- Styles personnalisés -->
     @stack('styles')

@@ -177,4 +177,46 @@ Route::post('/tickets/{ticket}/reply', [TicketController::class, 'reply'])
     Route::resource('settings', SettingController::class)->only(['index', 'edit', 'update']);
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Marketplace publique
+Route::prefix('marketplace')->name('marketplace.')->group(function () {
+    Route::get('/', [MarketplaceController::class, 'index'])->name('index');
+    Route::get('/{product}', [MarketplaceController::class, 'show'])->name('show');
+});
+
+// Espace publicité publique
+Route::prefix('advertise')->name('advertise.')->group(function () {
+    Route::get('/', [AdvertisementPublicController::class, 'index'])->name('index');
+    Route::get('/create', [AdvertisementPublicController::class, 'create'])->name('create');
+    Route::post('/', [AdvertisementPublicController::class, 'store'])->name('store');
+    Route::post('/payment', [AdvertisementPublicController::class, 'payment'])->name('payment');
+});
+
+// Tickets publics
+Route::prefix('tickets')->name('tickets.')->group(function () {
+    Route::get('/', [TicketPublicController::class, 'index'])->middleware('auth')->name('index');
+    Route::get('/create', [TicketPublicController::class, 'create'])->name('create');
+    Route::post('/', [TicketPublicController::class, 'store'])->name('store');
+});
+
+
+Route::get('/cookies', [PageController::class, 'cookies'])->name('pages.cookies');
+Route::get('/gdpr', [PageController::class, 'gdpr'])->name('pages.gdpr');
+
 require __DIR__.'/auth.php';
