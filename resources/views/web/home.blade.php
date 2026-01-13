@@ -24,7 +24,7 @@
                 <a href="#" class="ht-btn style-2 wow fadeInUp me-3" data-wow-delay=".5s">
                     Tester gratuitement
                 </a>
-                <a href="{{ route('support.contact') }}" class="ht-btn wow fadeInUp" data-wow-delay=".6s">
+                <a href="#" class="ht-btn wow fadeInUp" data-wow-delay=".6s">
                     Demander une démo
                 </a>
             </div>

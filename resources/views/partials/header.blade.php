@@ -53,8 +53,8 @@
     <li class="has-dropdown">
         <a href="#">Produit</a>
         <ul class="sub-menu">
-            <li><a href="{{ route('pages.features') }}">Fonctionnalités</a></li>
-            <li><a href="{{ route('pages.pricing') }}">Tarifs</a></li>
+            <li><a href="#">Fonctionnalités</a></li>
+            <li><a href="#">Tarifs</a></li>
             <li><a href="{{ route('pages.downloads') }}">Téléchargements</a></li>
         </ul>
     </li>
@@ -74,7 +74,7 @@
         <ul class="sub-menu">
             <li><a href="{{ route('support.faq') }}">FAQ</a></li>
             <li><a href="#">Guides</a></li>
-            <li><a href="{{ route('support.contact') }}">Contact</a></li>
+            <li><a href="#">Contact</a></li>
             <li><a href="{{ route('support.faq') }}">Tickets</a></li>
         </ul>
     </li>
