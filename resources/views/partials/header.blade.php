@@ -26,9 +26,12 @@
         <div class="container">
             <div class="ht-menu-wrapper">
                 <div class="ht-menu-left">
-                    <div class="ht-menu-logo">
-                        <a href="{{ route('home') }}"><img src="{{ asset('assets/img/logo/logo.svg') }}" alt="logo"></a>
-                    </div>
+                   <div class="ht-menu-logo">
+    <a href="{{ route('home') }}">
+        <img src="{{ asset('assets/img/logo/logomybusiness.jpg') }}" alt="logo" style="max-height:50px;width:auto;">
+    </a>
+</div>
+
                     <div class="ht-menu-main d-none d-lg-block">
                         <nav class="ht-mobile-menu-active">
                            <ul>
@@ -114,7 +117,7 @@
 <div class="ht-offcanvas">
     <div class="ht-offcanvas-wrapper">
         <div class="ht-offcanvas-header mb-50">
-            <a href="{{ route('home') }}" class="ht-offcanvas-logo"><img src="{{ asset('assets/img/logo/logo.svg') }}" alt="logo"></a>
+            <a href="{{ route('home') }}" class="ht-offcanvas-logo"><img src="{{ asset('assets/img/logo/logomybusiness.jpg') }}" alt="logo"></a>
             <button class="ht-offcanvas-toggle-close">
                 <i class="fas fa-times"></i>
             </button>

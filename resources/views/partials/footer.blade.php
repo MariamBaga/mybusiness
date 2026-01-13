@@ -3,7 +3,7 @@
     <div class="container">
         <div class="ht-footer-top-wrapper">
             <div class="ht-footer-top-left wow fadeInUp" data-wow-delay=".2s">
-                <a href="{{ route('home') }}"><img src="{{ asset('assets/img/logo/logo-white.svg') }}" alt="logo"></a>
+                <a href="{{ route('home') }}"><img src="{{ asset('assets/img/logo/logomybusiness.jpg') }}" alt="logo" style="max-height:50px;width:auto;"></a>
                 <p class="desc">At the core of our ethos lies a dedication to our clients. Your <br> success is our
                     shared triumph, and we're.</p>
             </div>

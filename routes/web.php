@@ -51,11 +51,20 @@ Route::prefix('blog')->name('blog.')->group(function () {
 });
 
 // Support public
+// Support public
+// Dans routes/web.php
+// Support public
+// Support public
 Route::prefix('support')->name('support.')->group(function () {
     Route::get('/', [SupportController::class, 'faq'])->name('faq');
-    Route::post('/contact', [SupportController::class, 'contact'])->name('contact');
-});
 
+    // ✅ CORRECTION : UN seul nom de route
+    Route::get('/contact', [SupportController::class, 'showContactForm'])
+        ->name('contact');  // Uniquement 'contact' (pas 'contact.show')
+
+    // Route POST
+    Route::post('/contact', [SupportController::class, 'contact'])->name('contact.submit');
+});
 /*
 |--------------------------------------------------------------------------
 | AUTH ROUTES

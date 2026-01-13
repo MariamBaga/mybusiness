@@ -359,7 +359,7 @@ return [
     'url' => 'admin/sponsors',
     'icon' => 'fas fa-star'],
     ['text' => 'Tickets',
-    // 'url' => 'admin/tickets',
+    'url' => 'admin/tickets',
      'icon' => 'fas fa-ticket-alt'],
     ['text' => 'Paramètres',
     //'url' => 'admin/settings',
