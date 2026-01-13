@@ -247,7 +247,7 @@
         </div>
 
         <div class="text-center mt-5">
-            <a href="#" class="ht-btn style-2">
+            <a href="{{ route('pages.pricing') }}" class="ht-btn style-2">
                 Voir les tarifs détaillés
             </a>
         </div>

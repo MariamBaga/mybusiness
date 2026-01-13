@@ -54,8 +54,8 @@
         <a href="#">Produit</a>
         <ul class="sub-menu">
             <li><a href="{{ route('pages.features') }}">Fonctionnalités</a></li>
-            <li><a href="#">Tarifs</a></li>
-            <li><a href="#">Téléchargements</a></li>
+            <li><a href="{{ route('pages.pricing') }}">Tarifs</a></li>
+            <li><a href="{{ route('pages.downloads') }}">Téléchargements</a></li>
         </ul>
     </li>
 
@@ -63,7 +63,7 @@
     <li class="has-dropdown">
         <a href="#">Contenus</a>
         <ul class="sub-menu">
-            <li><a href="#">Blog / Actualités</a></li>
+            <li><a href="{{ route('blog.index') }}">Blog / Actualités</a></li>
             <li><a href="{{ route('pages.partners') }}">Cas clients</a></li>
         </ul>
     </li>
@@ -72,10 +72,10 @@
     <li class="has-dropdown">
         <a href="#">Support</a>
         <ul class="sub-menu">
-            <li><a href="#">FAQ</a></li>
+            <li><a href="{{ route('support.faq') }}">FAQ</a></li>
             <li><a href="#">Guides</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Tickets</a></li>
+            <li><a href="{{ route('support.contact') }}">Contact</a></li>
+            <li><a href="{{ route('support.faq') }}">Tickets</a></li>
         </ul>
     </li>
 
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="ht-menu-right">
-                    <a href="#" class="ht-btn d-none d-lg-block">lets get in touch</a>
+                    <a href="{{ route('support.contact') }}" class="ht-btn d-none d-lg-block">lets get in touch</a>
                     <button class="ht-menu-btn d-lg-none offcanvas-toggle">
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>

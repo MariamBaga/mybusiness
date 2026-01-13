@@ -302,7 +302,7 @@
                         <li><i class="fa-solid fa-circle-check text-success me-2"></i> Guides et tutoriels</li>
                         <li><i class="fa-solid fa-circle-check text-success me-2"></i> Webinaires réguliers</li>
                     </ul>
-                    <a href="#" class="ht-btn style-4 mt-3">
+                    <a href="{{ route('support.faq') }}" class="ht-btn style-4 mt-3">
                         Consulter la FAQ
                     </a>
                 </div>
@@ -324,7 +324,7 @@
                         <li><i class="fa-solid fa-circle-check text-success me-2"></i> Devis personnalisés</li>
                         <li><i class="fa-solid fa-circle-check text-success me-2"></i> Accompagnement dédié</li>
                     </ul>
-                    <a href="#" class="ht-btn style-4 mt-3">
+                    <a href="{{ route('pages.partners') }}" class="ht-btn style-4 mt-3">
                         Devenir partenaire
                     </a>
                 </div>

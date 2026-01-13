@@ -254,7 +254,7 @@
                 <p class="mb-0">Notre équipe support est disponible pour répondre à toutes vos questions.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
-                <a href="#" class="ht-btn style-3">
+                <a href="{{ route('support.contact') }}" class="ht-btn style-3">
                     <i class="fa-solid fa-headset me-2"></i>
                     Nous contacter
                 </a>
