@@ -362,7 +362,7 @@ return [
     'url' => 'admin/tickets',
      'icon' => 'fas fa-ticket-alt'],
     ['text' => 'Paramètres',
-    //'url' => 'admin/settings',
+    'url' => 'admin/settings',
     'icon' => 'fas fa-cogs'],
 
     // Exemple multilevel

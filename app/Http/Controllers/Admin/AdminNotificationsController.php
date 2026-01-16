@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class NotificationsController extends Controller
+class AdminNotificationsController extends Controller
 {
     // Afficher toutes les notifications
     public function index(Request $request)

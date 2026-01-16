@@ -27,6 +27,10 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_sponsored')->default(false);
             $table->boolean('status')->default(true);
+            // Ajouter pour la redirection vers le partenaire (section 13.3)
+$table->string('partner_product_url')->nullable(); // URL de vente du partenaire
+$table->string('partner_contact_email')->nullable();
+$table->boolean('redirect_to_partner')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

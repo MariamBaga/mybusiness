@@ -17,13 +17,32 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\NotificationsController;
+use App\Http\Controllers\Admin\AdminNotificationsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SponsorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\SettingController;
+
+// Marketplace Controller
+use App\Http\Controllers\Web\MarketplaceController;
+
+// Advertisement Public Controller
+use App\Http\Controllers\Web\AdvertisementPublicController;
+
+// Ticket Public Controller
+use App\Http\Controllers\Web\TicketPublicController;
+
+// Client Controller
+use App\Http\Controllers\Web\ClientController;
+use App\Http\Controllers\Web\MemberAdvertisementController;
+use App\Http\Controllers\Web\PartnerDashboardController;
+use App\Http\Controllers\Web\PartnerProductController;
+use App\Http\Controllers\Web\SeoController;
+
+// Notifications Controller (public)
+use App\Http\Controllers\Web\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +61,12 @@ Route::prefix('pages')->group(function () {
     Route::get('/partners', [PageController::class, 'partners'])->name('pages.partners');
     Route::get('/legal', [PageController::class, 'legal'])->name('pages.legal');
     Route::get('/privacy', [PageController::class, 'privacy'])->name('pages.privacy');
+    Route::get('/cookies', [PageController::class, 'cookies'])->name('pages.cookies');
+    Route::get('/gdpr', [PageController::class, 'gdpr'])->name('pages.gdpr');
+    Route::get('/testimonials', [PageController::class, 'testimonials'])->name('pages.testimonials');
+    Route::get('/case-studies', [PageController::class, 'caseStudies'])->name('pages.case-studies');
+    Route::get('/demo', [PageController::class, 'demo'])->name('pages.demo');
+    Route::get('/sponsors', [PageController::class, 'sponsors'])->name('pages.sponsors');
 });
 
 // Blog public
@@ -51,20 +76,17 @@ Route::prefix('blog')->name('blog.')->group(function () {
 });
 
 // Support public
-// Support public
-// Dans routes/web.php
-// Support public
-// Support public
 Route::prefix('support')->name('support.')->group(function () {
     Route::get('/', [SupportController::class, 'faq'])->name('faq');
-
-    // ✅ CORRECTION : UN seul nom de route
-    Route::get('/contact', [SupportController::class, 'showContactForm'])
-        ->name('contact');  // Uniquement 'contact' (pas 'contact.show')
-
-    // Route POST
+    Route::get('/contact', [SupportController::class, 'showContactForm'])->name('contact');
     Route::post('/contact', [SupportController::class, 'contact'])->name('contact.submit');
+    Route::get('/guides', [SupportController::class, 'guides'])->name('guides');
+    Route::get('/guides/category/{category}', [SupportController::class, 'guidesByCategory'])->name('guides.category');
+    Route::get('/guides/beginner', [SupportController::class, 'beginnerGuide'])->name('guides.beginner');
+    Route::get('/guides/videos', [SupportController::class, 'videos'])->name('guides.videos');
+    Route::get('/guides/{slug}', [SupportController::class, 'showGuide'])->name('guides.show');
 });
+
 /*
 |--------------------------------------------------------------------------
 | AUTH ROUTES
@@ -75,20 +97,17 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-// Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Notifications
+    // Notifications (utilise le contrôleur Web)
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::get('/', [NotificationsController::class, 'index'])->name('index');
         Route::post('/read/{id}', [NotificationsController::class, 'markAsRead'])->name('read');
         Route::post('/read-all', [NotificationsController::class, 'markAllAsRead'])->name('readAll');
+        Route::get('/count', [NotificationsController::class, 'count'])->name('count');
     });
 });
 
@@ -99,17 +118,12 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users
     Route::resource('users', UserController::class);
 
-    /*
-    |--------------------------------------------------------------------------
-    | POSTS (slug)
-    |--------------------------------------------------------------------------
-    */
+    // Posts
     Route::prefix('posts')->name('posts.')->group(function () {
         Route::get('/', [PostController::class, 'index'])->name('index');
         Route::get('/create', [PostController::class, 'create'])->name('create');
@@ -122,34 +136,21 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         Route::get('/{post:slug}/export', [PostController::class, 'export'])->name('export');
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | PRODUCTS (UTILISE ID → PAS SLUG)
-    |--------------------------------------------------------------------------
-    */
+    // Products
     Route::resource('products', ProductController::class);
 
-    /*
-    |--------------------------------------------------------------------------
-    | AUTRES MODULES
-    |--------------------------------------------------------------------------
-    */
-
+    // Other modules
     Route::resource('ads', AdvertisementController::class);
-
     Route::resource('documents', DocumentController::class);
-    Route::get('documents/{document}/download', [DocumentController::class, 'download'])
-    ->name('documents.download');
+    Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
     Route::resource('faqs', FaqController::class);
-      // Route pour mettre à jour l'ordre
-        Route::post('/update-order', [FaqController::class, 'updateOrder'])->name('faqs.updateOrder');
+    Route::post('/faqs/update-order', [FaqController::class, 'updateOrder'])->name('faqs.updateOrder');
     Route::resource('sponsors', SponsorController::class);
-     // Route pour mettre à jour l'ordre
-        Route::post('/update-order', [SponsorController::class, 'updateOrder'])->name('sponsors.updateOrder');
+    Route::post('/sponsors/update-order', [SponsorController::class, 'updateOrder'])->name('sponsors.updateOrder');
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
 
-    // Partenaires (avec actions custom)
+    // Partners
     Route::prefix('partners')->name('partners.')->group(function () {
         Route::get('/', [PartnerController::class, 'index'])->name('index');
         Route::get('/create', [PartnerController::class, 'create'])->name('create');
@@ -158,65 +159,182 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         Route::get('/{partner}/edit', [PartnerController::class, 'edit'])->name('edit');
         Route::put('/{partner}', [PartnerController::class, 'update'])->name('update');
         Route::delete('/{partner}', [PartnerController::class, 'destroy'])->name('destroy');
-
         Route::patch('/{partner}/toggle-status', [PartnerController::class, 'toggleStatus'])->name('toggle-status');
         Route::patch('/{partner}/toggle-featured', [PartnerController::class, 'toggleFeatured'])->name('toggle-featured');
         Route::get('/{partner}/export', [PartnerController::class, 'export'])->name('export');
     });
 
-
-    Route::post('/admin/faqs/update-order', [FaqController::class, 'updateOrder'])
-    ->name('faqs.updateOrder');
-    // Tickets (admin only)
+    // Tickets
     Route::resource('tickets', TicketController::class);
-    // If you're using a resource controller, add it as a separate route
-Route::post('/tickets/{ticket}/reply', [TicketController::class, 'reply'])
-    ->name('tickets.reply');
+    Route::post('/tickets/{ticket}/reply', [TicketController::class, 'reply'])->name('tickets.reply');
 
     // Settings
     Route::resource('settings', SettingController::class)->only(['index', 'edit', 'update']);
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Marketplace publique
+/*
+|--------------------------------------------------------------------------
+| MARKETPLACE PUBLIC
+|--------------------------------------------------------------------------
+*/
 Route::prefix('marketplace')->name('marketplace.')->group(function () {
     Route::get('/', [MarketplaceController::class, 'index'])->name('index');
     Route::get('/{product}', [MarketplaceController::class, 'show'])->name('show');
 });
 
-// Espace publicité publique
+/*
+|--------------------------------------------------------------------------
+| ADVERTISEMENT PUBLIC
+|--------------------------------------------------------------------------
+*/
 Route::prefix('advertise')->name('advertise.')->group(function () {
     Route::get('/', [AdvertisementPublicController::class, 'index'])->name('index');
     Route::get('/create', [AdvertisementPublicController::class, 'create'])->name('create');
     Route::post('/', [AdvertisementPublicController::class, 'store'])->name('store');
     Route::post('/payment', [AdvertisementPublicController::class, 'payment'])->name('payment');
+    Route::get('/pricing', [AdvertisementPublicController::class, 'pricing'])->name('pricing');
 });
 
-// Tickets publics
+/*
+|--------------------------------------------------------------------------
+| TICKETS PUBLIC
+|--------------------------------------------------------------------------
+*/
 Route::prefix('tickets')->name('tickets.')->group(function () {
     Route::get('/', [TicketPublicController::class, 'index'])->middleware('auth')->name('index');
     Route::get('/create', [TicketPublicController::class, 'create'])->name('create');
     Route::post('/', [TicketPublicController::class, 'store'])->name('store');
+    Route::get('/{ticket}', [TicketPublicController::class, 'show'])->middleware('auth')->name('show');
+    Route::post('/{ticket}/reply', [TicketPublicController::class, 'reply'])->middleware('auth')->name('reply');
+    Route::post('/{ticket}/close', [TicketPublicController::class, 'close'])->middleware('auth')->name('close');
+    Route::get('/check-new', [TicketPublicController::class, 'checkNew'])->middleware('auth')->name('check-new');
 });
 
+/*
+|--------------------------------------------------------------------------
+| CLIENT SPACE
+|--------------------------------------------------------------------------
+*/
+Route::prefix('client')->middleware('auth')->name('client.')->group(function () {
+    Route::get('/dashboard', [ClientController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profile', [ClientController::class, 'profile'])->name('profile');
+    Route::put('/profile', [ClientController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/billing', [ClientController::class, 'billing'])->name('billing');
+    Route::get('/documents', [ClientController::class, 'documents'])->name('documents');
+    Route::get('/notifications', [ClientController::class, 'notifications'])->name('notifications');
+    Route::delete('/notifications/{notification}', [ClientController::class, 'deleteNotification'])->name('notifications.delete');
+    Route::post('/notifications/clear', [ClientController::class, 'clearNotifications'])->name('notifications.clear');
+    Route::post('/notifications/settings', [ClientController::class, 'updateNotificationSettings'])->name('notifications.settings');
+});
 
-Route::get('/cookies', [PageController::class, 'cookies'])->name('pages.cookies');
-Route::get('/gdpr', [PageController::class, 'gdpr'])->name('pages.gdpr');
+/*
+|--------------------------------------------------------------------------
+| MEMBER ADVERTISEMENTS
+|--------------------------------------------------------------------------
+*/
+Route::prefix('member/ads')->middleware(['auth', 'role:member'])->name('member.ads.')->group(function () {
+    Route::get('/', [MemberAdvertisementController::class, 'index'])->name('index');
+    Route::get('/create', [MemberAdvertisementController::class, 'create'])->name('create');
+    Route::post('/', [MemberAdvertisementController::class, 'store'])->name('store');
+    Route::get('/stats/{ad}', [MemberAdvertisementController::class, 'stats'])->name('stats');
+    Route::get('/{ad}/edit', [MemberAdvertisementController::class, 'edit'])->name('edit');
+    Route::put('/{ad}', [MemberAdvertisementController::class, 'update'])->name('update');
+    Route::delete('/{ad}', [MemberAdvertisementController::class, 'destroy'])->name('destroy');
+    Route::post('/{ad}/pause', [MemberAdvertisementController::class, 'pause'])->name('pause');
+    Route::post('/{ad}/activate', [MemberAdvertisementController::class, 'activate'])->name('activate');
+    Route::get('/{ad}/refresh', [MemberAdvertisementController::class, 'refreshStats'])->name('refresh');
 
+    // Bulk actions
+    Route::post('/bulk/activate', [MemberAdvertisementController::class, 'bulkActivate'])->name('bulk.activate');
+    Route::post('/bulk/pause', [MemberAdvertisementController::class, 'bulkPause'])->name('bulk.pause');
+    Route::post('/bulk/delete', [MemberAdvertisementController::class, 'bulkDelete'])->name('bulk.delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| PARTNER SPACE
+|--------------------------------------------------------------------------
+*/
+Route::prefix('partner')->middleware(['auth', 'role:partner'])->name('partner.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [PartnerDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/stats', [PartnerDashboardController::class, 'stats'])->name('stats');
+    Route::get('/profile', [PartnerDashboardController::class, 'profile'])->name('profile');
+    Route::put('/profile', [PartnerDashboardController::class, 'updateProfile'])->name('profile.update');
+
+    // Partner products
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/', [PartnerProductController::class, 'index'])->name('index');
+        Route::get('/create', [PartnerProductController::class, 'create'])->name('create');
+        Route::post('/', [PartnerProductController::class, 'store'])->name('store');
+        Route::get('/{product}', [PartnerProductController::class, 'show'])->name('show');
+        Route::get('/{product}/edit', [PartnerProductController::class, 'edit'])->name('edit');
+        Route::put('/{product}', [PartnerProductController::class, 'update'])->name('update');
+        Route::delete('/{product}', [PartnerProductController::class, 'destroy'])->name('destroy');
+        Route::patch('/{product}/toggle-status', [PartnerProductController::class, 'toggleStatus'])->name('toggle-status');
+        Route::patch('/{product}/toggle-featured', [PartnerProductController::class, 'toggleFeatured'])->name('toggle-featured');
+        Route::get('/{product}/analytics', [PartnerProductController::class, 'analytics'])->name('analytics');
+    });
+
+    // Partner documents (optionnel)
+    Route::prefix('documents')->name('documents.')->group(function () {
+        Route::get('/', [PartnerDashboardController::class, 'documents'])->name('index');
+        Route::post('/upload', [PartnerDashboardController::class, 'uploadDocument'])->name('upload');
+        Route::delete('/{document}', [PartnerDashboardController::class, 'deleteDocument'])->name('delete');
+        Route::get('/{document}/download', [PartnerDashboardController::class, 'downloadDocument'])->name('download');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| SEO PUBLIC ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::prefix('sitemap')->name('sitemap.')->group(function () {
+    Route::get('/', [SeoController::class, 'sitemapIndex'])->name('index');
+    Route::get('/pages', [SeoController::class, 'pages'])->name('pages');
+    Route::get('/blog', [SeoController::class, 'blog'])->name('blog');
+    Route::get('/products', [SeoController::class, 'products'])->name('products');
+    Route::get('/categories', [SeoController::class, 'categories'])->name('categories');
+});
+
+Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitemap.index');
+Route::get('/sitemap/pages', [SeoController::class, 'pages'])->name('sitemap.pages');
+Route::get('/sitemap/blog', [SeoController::class, 'blog'])->name('sitemap.blog');
+Route::get('/sitemap/products', [SeoController::class, 'products'])->name('sitemap.products');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
+Route::get('/manifest.json', [SeoController::class, 'manifest'])->name('manifest');
+
+/*
+|--------------------------------------------------------------------------
+| AJAX/API ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::middleware('web')->group(function () {
+    // Search routes
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
+    Route::get('/search/blog', [BlogController::class, 'search'])->name('search.blog');
+    Route::get('/search/products', [MarketplaceController::class, 'search'])->name('search.products');
+
+    // Newsletter subscription
+    Route::post('/newsletter/subscribe', [HomeController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
+
+    // Contact form
+    Route::post('/contact', [HomeController::class, 'contact'])->name('contact.submit');
+});
+
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION ROUTES (Laravel Breeze/UI)
+|--------------------------------------------------------------------------
+*/
 require __DIR__.'/auth.php';
+
+/*
+|--------------------------------------------------------------------------
+| FALLBACK ROUTE
+|--------------------------------------------------------------------------
+*/
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});

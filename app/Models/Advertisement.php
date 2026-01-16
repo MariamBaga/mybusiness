@@ -20,7 +20,14 @@ class Advertisement extends Model
         'clicks',
         'type',
         'status',
-        'priority'
+        'priority',
+        'target',
+        'advertiser_id',
+        'advertiser_name',
+        'price_paid',
+        'payment_status',
+        'payment_method',
+        'transaction_id'
     ];
 
     protected $casts = [

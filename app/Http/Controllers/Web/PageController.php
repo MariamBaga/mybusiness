@@ -68,4 +68,31 @@ class PageController extends Controller
     {
         return view('web.pages.privacy');
     }
+
+
+
+    // Ajoutez ces méthodes à votre PageController existant :
+
+public function testimonials()
+{
+    // À adapter selon votre modèle Testimonial
+    $testimonials = []; // Testimonial::all() si vous avez le modèle
+
+    return view('web.pages.testimonials', compact('testimonials'));
+}
+
+public function caseStudies()
+{
+    return view('web.pages.case-studies');
+}
+
+public function cookies()
+{
+    return view('web.pages.cookies');
+}
+
+public function gdpr()
+{
+    return view('web.pages.gdpr');
+}
 }

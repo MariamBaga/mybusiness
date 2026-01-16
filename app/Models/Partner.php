@@ -19,7 +19,8 @@ class Partner extends Model
         'address',
         'status',
         'type',
-        'featured'
+        'featured',
+        
     ];
 
     protected $casts = [

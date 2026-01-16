@@ -27,7 +27,10 @@ class Product extends Model
         'dimensions',
         'is_featured',
         'is_sponsored',
-        'status'
+        'status',
+        'partner_product_url',
+        'partner_contact_email',
+        'redirect_to_partner'
     ];
 
     protected $casts = [
