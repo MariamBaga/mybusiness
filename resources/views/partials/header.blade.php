@@ -62,10 +62,10 @@
                                 </li>
 
                                 <!-- 4. MARKETPLACE -->
-                                <li><a href="#">Marketplace</a></li>
+                                <li><a href="{{ route('marketplace.index') }}">Marketplace</a></li>
 
                                 <!-- 5. PUBLICITÉ -->
-                                <li><a href="#">Publicité</a></li>
+                                <li><a href="{{ route('advertise.index') }}">Publicité</a></li>
 
                                 <!-- 6. CONTENUS -->
                                 <li class="has-dropdown">
@@ -91,7 +91,7 @@
                                 </li>
 
                                 <!-- 8. ESPACE CLIENT -->
-                                <!-- @auth
+                                @auth
                                     <li class="has-dropdown">
                                         <a href="#">
                                             <i class="fas fa-user-circle me-1"></i>
@@ -138,7 +138,7 @@
                                             <li><a href="{{ route('pages.pricing') }}">Essai gratuit</a></li>
                                         </ul>
                                     </li>
-                                @endauth -->
+                                @endauth
                             </ul>
                         </nav>
                     </div>
@@ -234,8 +234,8 @@
                         </ul>
                     </li>
 
-                    <!-- <li><a href="#">Marketplace</a></li>
-                    <li><a href="#">Publicité</a></li> -->
+                    <li><a href="{{ route('marketplace.index') }}">Marketplace</a></li>
+                    <li><a href="{{ route('advertise.index') }}">Publicité</a></li>
 
                     <li class="has-dropdown">
                         <a href="#">Contenus</a>
@@ -255,9 +255,9 @@
                             @endauth
                         </ul>
                     </li>
-<!--
+
                     @auth
-                        <li class="has-dropdown">
+                        <!-- <li class="has-dropdown">
                             <a href="#">{{ Auth::user()->name }}</a>
                             <ul class="sub-menu">
                                 <li><a href="{{ route('client.dashboard') }}">Tableau de bord</a></li>
@@ -277,7 +277,7 @@
                                     </form>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
                     @else
                         <li class="has-dropdown">
                             <a href="#">Espace client</a>
@@ -286,7 +286,7 @@
                                 <li><a href="{{ route('register') }}">Inscription</a></li>
                             </ul>
                         </li>
-                    @endauth -->
+                    @endauth
                 </ul>
             </nav>
         </div>
