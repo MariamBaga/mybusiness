@@ -252,7 +252,7 @@
                     </div>
                     <h5>Marketplace</h5>
                     <p class="text-muted">Découvrez les produits de nos partenaires</p>
-                    <a href="{{ route('marketplace.index') }}" class="ht-btn style-2 w-100">
+                    <a href="#" class="ht-btn style-2 w-100">
                         <i class="fas fa-shopping-bag me-2"></i>Visiter
                     </a>
                 </div>
@@ -266,7 +266,7 @@
                     </div>
                     <h5>Publicité</h5>
                     <p class="text-muted">Promouvez votre entreprise sur MyBusiness</p>
-                    <a href="{{ route('advertise.index') }}" class="ht-btn style-2 w-100">
+                    <a href="#" class="ht-btn style-2 w-100">
                         <i class="fas fa-bullhorn me-2"></i>Promouvoir
                     </a>
                 </div>

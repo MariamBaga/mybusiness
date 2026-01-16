@@ -280,7 +280,7 @@
                 </div>
 
                 <div class="text-center mt-5">
-                    <a href="{{ route('marketplace.index') }}" class="ht-btn">
+                    <a href="#" class="ht-btn">
                         <i class="fas fa-store me-2"></i>Visiter la marketplace
                     </a>
                 </div>
@@ -316,7 +316,7 @@
                         </ul>
 
                         <div class="d-flex gap-3">
-                            <a href="{{ route('advertise.index') }}" class="ht-btn style-2">
+                            <a href="#" class="ht-btn style-2">
                                 <i class="fas fa-bullhorn me-2"></i>Publicité
                             </a>
                             <a href="{{ route('pages.partners') }}" class="ht-btn btn-outline-primary">

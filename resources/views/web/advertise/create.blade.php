@@ -345,7 +345,7 @@ continuer cette blade @extends('layouts.master')
 
                             <!-- Boutons d'action -->
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="{{ route('advertise.index') }}" class="btn btn-outline-secondary">
+                                <a href="#" class="btn btn-outline-secondary">
                                     <i class="fas fa-arrow-left me-2"></i>Retour
                                 </a>
                                 <div>

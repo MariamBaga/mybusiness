@@ -33,7 +33,7 @@
                         <li><a href="{{ route('blog.index') }}">Blog & Actualités</a></li>
                         <li><a href="{{ route('pages.downloads') }}">Téléchargements</a></li>
                         <li><a href="{{ route('pages.pricing') }}">Tarifs</a></li>
-                        <li><a href="{{ route('marketplace.index') }}">Marketplace</a></li>
+                        <li><a href="#">Marketplace</a></li>
                     </ul>
                 </div>
                 <div class="ht-footer-widget-items wow fadeInUp" data-wow-delay=".9s">

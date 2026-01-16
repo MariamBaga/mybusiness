@@ -38,7 +38,7 @@
         <div class="row g-4">
             <!-- Recherche -->
             <div class="col-lg-5">
-                <form action="{{ route('marketplace.index') }}" method="GET" class="search-form">
+                <form action="#" method="GET" class="search-form">
                     <div class="input-group">
                         <input type="text"
                                name="search"
@@ -216,7 +216,7 @@
             <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
             <h4 class="text-muted">Aucun produit trouvé</h4>
             <p class="text-muted">Essayez avec d'autres critères de recherche</p>
-            <a href="{{ route('marketplace.index') }}" class="ht-btn">
+            <a href="#" class="ht-btn">
                 <i class="fas fa-redo me-2"></i>Réinitialiser les filtres
             </a>
         </div>
