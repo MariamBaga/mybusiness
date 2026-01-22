@@ -287,4 +287,33 @@ class AdvertisementPublicController extends Controller
 
         return view('web.advertise.pricing', compact('pricing'));
     }
+
+
+
+    /**
+ * Afficher les publicités actives
+ */
+public function showAds()
+{
+    $ads = Advertisement::where('status', true)
+        ->where('payment_status', 'paid')
+        ->where('end_date', '>=', now())
+        ->where('target', 'public')
+        ->orderBy('priority', 'desc')
+        ->orderBy('created_at', 'desc')
+        ->paginate(12);
+
+    return view('web.advertise.show', compact('ads'));
+}
+
+/**
+ * Afficher une publicité spécifique
+ */
+public function showAd(Advertisement $ad)
+{
+    // Incrémenter les vues
+    $ad->increment('views');
+
+    return view('web.advertise.detail', compact('ad'));
+}
 }

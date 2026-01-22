@@ -18,7 +18,7 @@
             <div class="card-header">
                 <h3 class="card-title">Formulaire de modification</h3>
             </div>
-            <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('products.update', $product->slug) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="card-body">
@@ -308,7 +308,7 @@
          width="100"
          class="mt-2 img-thumbnail">
 @endif
-                                                
+
                                         </div>
                                         <label for="image">Nouvelle image</label>
                                         <div class="custom-file">
@@ -337,51 +337,60 @@
                             </div>
 
                             <!-- Options -->
-                            <div class="card mt-3">
-                                <div class="card-header bg-secondary text-white">
-                                    Options
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-check mb-3">
-                                        <input type="checkbox"
-                                               name="status"
-                                               id="status"
-                                               class="form-check-input"
-                                               {{ old('status', $product->status) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="status">
-                                            Produit actif
-                                        </label>
-                                    </div>
+                       <!-- Dans la section Options de votre edit.blade.php -->
+<div class="card mt-3">
+    <div class="card-header bg-secondary text-white">
+        Options
+    </div>
+    <div class="card-body">
+        <!-- CORRECTION : Ajouter des champs cachés pour la valeur 0 -->
+        <input type="hidden" name="status" value="0">
+        <input type="hidden" name="is_featured" value="0">
+        <input type="hidden" name="is_sponsored" value="0">
 
-                                    <div class="form-check mb-3">
-                                        <input type="checkbox"
-                                               name="is_featured"
-                                               id="is_featured"
-                                               class="form-check-input"
-                                               {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="is_featured">
-                                            Produit en vedette
-                                        </label>
-                                        <small class="form-text text-muted d-block">
-                                            Ce produit apparaîtra en avant
-                                        </small>
-                                    </div>
+        <div class="form-check mb-3">
+            <input type="checkbox"
+                   name="status"
+                   id="status"
+                   class="form-check-input"
+                   value="1"
+                   {{ old('status', $product->status) ? 'checked' : '' }}>
+            <label class="form-check-label" for="status">
+                Produit actif
+            </label>
+        </div>
 
-                                    <div class="form-check">
-                                        <input type="checkbox"
-                                               name="is_sponsored"
-                                               id="is_sponsored"
-                                               class="form-check-input"
-                                               {{ old('is_sponsored', $product->is_sponsored) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="is_sponsored">
-                                            Produit sponsorisé
-                                        </label>
-                                        <small class="form-text text-muted d-block">
-                                            Ce produit sera mis en avant par du sponsoring
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="form-check mb-3">
+            <input type="checkbox"
+                   name="is_featured"
+                   id="is_featured"
+                   class="form-check-input"
+                   value="1"
+                   {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
+            <label class="form-check-label" for="is_featured">
+                Produit en vedette
+            </label>
+            <small class="form-text text-muted d-block">
+                Ce produit apparaîtra en avant
+            </small>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox"
+                   name="is_sponsored"
+                   id="is_sponsored"
+                   class="form-check-input"
+                   value="1"
+                   {{ old('is_sponsored', $product->is_sponsored) ? 'checked' : '' }}>
+            <label class="form-check-label" for="is_sponsored">
+                Produit sponsorisé
+            </label>
+            <small class="form-text text-muted d-block">
+                Ce produit sera mis en avant par du sponsoring
+            </small>
+        </div>
+    </div>
+</div>
 
                             <!-- Actions -->
                             <div class="card mt-3">
@@ -389,7 +398,7 @@
                                     <button type="submit" class="btn btn-primary btn-block">
                                         <i class="fas fa-save"></i> Mettre à jour
                                     </button>
-                                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-block">
+                                    <a href="{{ route('products.show', $product->slug) }}" class="btn btn-info btn-block">
                                         <i class="fas fa-eye"></i> Voir le produit
                                     </a>
                                     <a href="{{ route('products.index') }}" class="btn btn-default btn-block">

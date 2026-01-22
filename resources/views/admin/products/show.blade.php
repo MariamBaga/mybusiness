@@ -19,7 +19,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Informations générales</h3>
                     <div>
-                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">
+                        <a href="{{ route('products.edit', $product->slug) }}" class="btn btn-warning">
                             <i class="fas fa-edit"></i> Modifier
                         </a>
                         <a href="{{ route('products.index') }}" class="btn btn-default">
@@ -167,29 +167,35 @@
                                 </div>
 
                                 <!-- Spécifications -->
-                                @if($product->specifications && count($product->specifications) > 0)
-                                    <div class="mb-4">
-                                        <h5>Spécifications</h5>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-striped">
-                                                <thead class="thead-dark">
-                                                    <tr>
-                                                        <th>Caractéristique</th>
-                                                        <th>Valeur</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($product->specifications as $key => $value)
-                                                        <tr>
-                                                            <td><strong>{{ $key }}</strong></td>
-                                                            <td>{{ $value }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @endif
+                                {{-- Ligne 170 et suivantes --}}
+@if($product->specifications && !empty($product->specifications))
+    @php
+        // Décoder le JSON en tableau
+        $specifications = json_decode($product->specifications, true);
+    @endphp
+
+    @if(is_array($specifications) && count($specifications) > 0)
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="card-title">Spécifications techniques</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tbody>
+                            @foreach($specifications as $key => $value)
+                                <tr>
+                                    <th style="width: 30%">{{ $key }}</th>
+                                    <td>{{ $value }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+@endif
                             </div>
                         </div>
 
@@ -197,10 +203,10 @@
                         <div class="card mt-3">
                             <div class="card-body text-center">
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">
+                                    <a href="{{ route('products.edit', $product->slug) }}" class="btn btn-warning">
                                         <i class="fas fa-edit"></i> Modifier
                                     </a>
-                                    <form action="{{ route('products.destroy', $product->id) }}"
+                                    <form action="{{ route('products.destroy', $product->slug) }}"
                                           method="POST"
                                           class="d-inline"
                                           onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.');">

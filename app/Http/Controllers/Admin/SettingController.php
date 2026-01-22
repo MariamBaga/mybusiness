@@ -20,7 +20,7 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-       
+
 
         $data = $request->except('_token');
 
@@ -52,4 +52,13 @@ class SettingController extends Controller
 
         return view('admin.settings.group', compact('group', 'settings'));
     }
+
+
+
+    public function edit($id)
+{
+    $setting = Setting::findOrFail($id);
+
+    return view('admin.settings.edit', compact('setting'));
+}
 }

@@ -107,11 +107,11 @@
     transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
     z-index: 9;
     margin-bottom: 4px;
-    
+
    }
    .nice-select .list li:not(:last-child){
       margin-right: 0 !important;
-   }   
+   }
   .nice-select .option {
     cursor: pointer;
     font-weight: 400;
@@ -127,7 +127,7 @@
     transition: all 0.2s;
    }
     .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
-      background-color: #101046; }
+      background-color: #92c2a7; }
     .nice-select .option.selected {
       font-weight: bold; }
     .nice-select .option.disabled {

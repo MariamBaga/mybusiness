@@ -1,37 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminNotificationsController extends Controller
 {
-    // Afficher toutes les notifications
-    public function index(Request $request)
+    public function index()
     {
-        $user = $request->user();
-
-        return view('notifications.index', [
-            'unread' => $user->unreadNotifications,
-            'read'   => $user->readNotifications,
-        ]);
-    }
-
-    // Lire une notification
-    public function markAsRead($id)
-    {
-        $notification = auth()->user()->notifications()->findOrFail($id);
-
-        $notification->markAsRead();
-
-        return back();
-    }
-
-    // Lire toutes les notifications
-    public function markAllAsRead()
-    {
-        auth()->user()->unreadNotifications->markAsRead();
-
-        return back();
+        $notifications = Auth::user()->notifications()->paginate(20);
+        return view('admin.notifications.index', compact('notifications'));
     }
 }

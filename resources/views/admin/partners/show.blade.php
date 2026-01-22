@@ -390,7 +390,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('products.show', $product) }}"
+                                        <a href="{{ route('products.show', $product->slug) }}"
                                            class="btn btn-sm btn-outline-info"
                                            data-toggle="tooltip"
                                            title="Voir détails">

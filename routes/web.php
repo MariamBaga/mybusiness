@@ -76,11 +76,12 @@ Route::prefix('blog')->name('blog.')->group(function () {
 });
 
 // Support public
+// Support public
 Route::prefix('support')->name('support.')->group(function () {
     Route::get('/', [SupportController::class, 'faq'])->name('faq');
     Route::get('/contact', [SupportController::class, 'showContactForm'])->name('contact');
     Route::post('/contact', [SupportController::class, 'contact'])->name('contact.submit');
-    Route::get('/guides', [SupportController::class, 'guides'])->name('guides');
+    Route::get('/guides', [SupportController::class, 'guides'])->name('guides'); // ✅ Cette route existe
     Route::get('/guides/category/{category}', [SupportController::class, 'guidesByCategory'])->name('guides.category');
     Route::get('/guides/beginner', [SupportController::class, 'beginnerGuide'])->name('guides.beginner');
     Route::get('/guides/videos', [SupportController::class, 'videos'])->name('guides.videos');
@@ -104,7 +105,8 @@ Route::middleware('auth')->group(function () {
 
     // Notifications (utilise le contrôleur Web)
     Route::prefix('notifications')->name('notifications.')->group(function () {
-        Route::get('/', [NotificationsController::class, 'index'])->name('index');
+         Route::get('/', [AdminNotificationsController::class, 'index'])->name('index');
+
         Route::post('/read/{id}', [NotificationsController::class, 'markAsRead'])->name('read');
         Route::post('/read-all', [NotificationsController::class, 'markAllAsRead'])->name('readAll');
         Route::get('/count', [NotificationsController::class, 'count'])->name('count');
@@ -137,7 +139,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     });
 
     // Products
-    Route::resource('products', ProductController::class);
+  // Dans la section admin (~lignes 100-110)
+Route::prefix('products')->name('products.')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('index');
+    Route::get('/create', [ProductController::class, 'create'])->name('create');
+    Route::post('/', [ProductController::class, 'store'])->name('store');
+    Route::get('/{product:slug}', [ProductController::class, 'show'])->name('show'); // Slug
+    Route::get('/{product:slug}/edit', [ProductController::class, 'edit'])->name('edit'); // Slug
+    Route::put('/{product:slug}', [ProductController::class, 'update'])->name('update'); // Slug
+    Route::delete('/{product:slug}', [ProductController::class, 'destroy'])->name('destroy'); // Slug
+});
 
     // Other modules
     Route::resource('ads', AdvertisementController::class);
@@ -187,11 +198,15 @@ Route::prefix('marketplace')->name('marketplace.')->group(function () {
 | ADVERTISEMENT PUBLIC
 |--------------------------------------------------------------------------
 */
+// Après les routes existantes pour advertise
 Route::prefix('advertise')->name('advertise.')->group(function () {
     Route::get('/', [AdvertisementPublicController::class, 'index'])->name('index');
+    Route::get('/ads', [AdvertisementPublicController::class, 'showAds'])->name('ads');
+    Route::get('/ad/{ad}', [AdvertisementPublicController::class, 'showAd'])->name('show');
     Route::get('/create', [AdvertisementPublicController::class, 'create'])->name('create');
     Route::post('/', [AdvertisementPublicController::class, 'store'])->name('store');
-    Route::post('/payment', [AdvertisementPublicController::class, 'payment'])->name('payment');
+    Route::get('/payment/{ad}', [AdvertisementPublicController::class, 'payment'])->name('payment');
+    Route::post('/payment/{ad}/process', [AdvertisementPublicController::class, 'processPayment'])->name('payment.process');
     Route::get('/pricing', [AdvertisementPublicController::class, 'pricing'])->name('pricing');
 });
 
@@ -330,11 +345,3 @@ Route::middleware('web')->group(function () {
 */
 require __DIR__.'/auth.php';
 
-/*
-|--------------------------------------------------------------------------
-| FALLBACK ROUTE
-|--------------------------------------------------------------------------
-*/
-Route::fallback(function () {
-    return response()->view('errors.404', [], 404);
-});
