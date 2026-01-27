@@ -316,4 +316,64 @@ public function showAd(Advertisement $ad)
 
     return view('web.advertise.detail', compact('ad'));
 }
+
+
+/**
+ * Redirection avec tracking des clics
+ */
+// Dans AdvertisementPublicController.php
+public function trackClick($id)
+{
+    try {
+        $ad = Advertisement::findOrFail($id);
+
+        // Vérifier si la pub est active
+        if ($ad->status && $ad->payment_status == 'paid' && $ad->end_date >= now()) {
+            $ad->increment('clicks');
+
+            // Mettre à jour le taux de clic
+            if ($ad->views > 0) {
+                $ad->ctr = ($ad->clicks / $ad->views) * 100;
+                $ad->save();
+            }
+        }
+
+        // Rediriger vers l'URL
+        return redirect()->away($ad->url);
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Publicité non trouvée');
+    }
+}
+
+public function markPopupAsShown(Request $request)
+{
+    session(['ad_popup_shown' => true]);
+    return response()->json(['success' => true]);
+}
+
+public function redirectAd($id)
+{
+    $ad = Advertisement::findOrFail($id);
+
+    // Incrémenter les vues si c'est la première fois
+    if (!session()->has("ad_viewed_{$id}")) {
+        $ad->increment('views');
+        session()->put("ad_viewed_{$id}", true);
+    }
+
+    return view('web.advertise.redirect', compact('ad'));
+}
+
+public function trackView($id)
+{
+    $ad = Advertisement::find($id);
+
+    if ($ad && !session()->has("ad_viewed_{$id}")) {
+        $ad->increment('views');
+        session()->put("ad_viewed_{$id}", true);
+    }
+
+    return response()->json(['success' => true]);
+}
 }

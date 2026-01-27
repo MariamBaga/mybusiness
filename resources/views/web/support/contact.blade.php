@@ -30,7 +30,7 @@
                         </div>
                         <div class="content">
                             <span>Téléphone</span>
-                            <h4>+225 27 22 44 00 00</h4>
+                            <h4>+225 05 64 51 59 16</h4>
                             <p class="mt-2 text-muted">Lun - Ven : 8h - 18h</p>
                         </div>
                     </div>

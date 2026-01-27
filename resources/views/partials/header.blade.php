@@ -11,7 +11,7 @@
                 </div>
                 <div class="col-lg-6">
                     <ul class="right">
-                        <li><i class="fa-solid fa-phone"></i><a href="tel:+2250700000000">+225 07 00 00 00 00</a></li>
+                        <li><i class="fa-solid fa-phone"></i><a href="tel:+2250564515916">+225 05 64 51 59 16</a></li>
                         <li><i class="fa-solid fa-envelope"></i>
                             <a href="mailto:contact@mybusiness.ci">contact@mybusiness.ci</a>
                         </li>
@@ -20,6 +20,15 @@
             </div>
         </div>
     </div>
+
+
+    <!-- BANNIÈRE HEADER (Publicité) -->
+    @include('components.advertisement', [
+        'placement' => 'header',
+        'limit' => 1,
+        'title' => null,
+        'showCTA' => false
+    ])
 
     <!-- ht-main-header area start -->
     <div class="ht-main-header header-1" id="header-sticky">
@@ -92,7 +101,7 @@
 
                                 <!-- 8. ESPACE CLIENT -->
                                 @auth
-                                    <li class="has-dropdown">
+                                    <!-- <li class="has-dropdown">
                                         <a href="#">
                                             <i class="fas fa-user-circle me-1"></i>
                                             {{ Auth::user()->name }}
@@ -127,7 +136,7 @@
                                                 </form>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> -->
                                 @else
                                     <li class="has-dropdown">
                                         <a href="#">Espace client</a>
@@ -146,7 +155,7 @@
                 <div class="ht-menu-right">
                     @auth
                         <!-- Notifications -->
-                        <div class="dropdown me-3 d-none d-lg-inline-block">
+                        <!-- <div class="dropdown me-3 d-none d-lg-inline-block">
                             <a href="#" class="btn btn-outline-primary btn-sm position-relative" data-bs-toggle="dropdown">
                                 <i class="fas fa-bell"></i>
                                 @if(Auth::user()->unreadNotifications()->count() > 0)
@@ -175,7 +184,7 @@
                                     <a href="{{ route('client.notifications') }}" class="btn btn-sm btn-link">Voir toutes</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- CTA selon le rôle -->
                         @if(Auth::user()->hasRole('partner'))
@@ -296,7 +305,7 @@
         </div>
         <div class="ht-offcanvas-info mb-50">
             <h3 class="ht-offcanvas__title">Contact</h3>
-            <span><a href="tel:+2250700000000"><i class="fas fa-phone me-2"></i>+225 07 00 00 00 00</a></span>
+            <span><a href="tel:+2250564515916"><i class="fas fa-phone me-2"></i>+225 05 64 51 59 16</a></span>
             <span><a href="mailto:contact@mybusiness.ci"><i class="fas fa-envelope me-2"></i>contact@mybusiness.ci</a></span>
             <span><a href="#"><i class="fas fa-map-marker-alt me-2"></i>Abidjan, Côte d'Ivoire</a></span>
         </div>

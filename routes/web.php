@@ -208,7 +208,23 @@ Route::prefix('advertise')->name('advertise.')->group(function () {
     Route::get('/payment/{ad}', [AdvertisementPublicController::class, 'payment'])->name('payment');
     Route::post('/payment/{ad}/process', [AdvertisementPublicController::class, 'processPayment'])->name('payment.process');
     Route::get('/pricing', [AdvertisementPublicController::class, 'pricing'])->name('pricing');
+    Route::post('/{id}/click', [AdvertisementPublicController::class, 'trackClick'])->name('click');
+
+    Route::post('/popup-shown', [AdvertisementPublicController::class, 'markPopupAsShown'])
+         ->name('popup.shown');
+
+         // Redirection pour tracking
+    Route::get('/redirect/{id}', [AdvertisementPublicController::class, 'redirectAd'])->name('redirect');
+
+          // Route pour les annonceurs connectés
+    Route::middleware('auth')->group(function () {
+        Route::get('/my-ads', [AdvertisementPublicController::class, 'myAds'])->name('my-ads');
+        Route::get('/my-ads/stats/{ad}', [AdvertisementPublicController::class, 'adStats'])->name('ad-stats');
+    });
 });
+Route::post('/advertise/{id}/view', [AdvertisementPublicController::class, 'trackView'])
+     ->name('advertise.view');
+
 
 /*
 |--------------------------------------------------------------------------

@@ -202,7 +202,7 @@
                                                id="phone"
                                                class="form-control @error('phone') is-invalid @enderror"
                                                value="{{ old('phone', auth()->user()->phone) }}"
-                                               placeholder="+225 00 00 00 00">
+                                               placeholder="+225 05 64 51 59 16">
                                         @error('phone')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
